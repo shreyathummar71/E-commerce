@@ -1,4 +1,4 @@
-require("dotenv").config();
+/*require("dotenv").config();
 const port = process.env.PORT || 8080;
 const express = require("express");
 const cors = require("cors");
@@ -23,4 +23,36 @@ app.use("/api/products", product);
 
 app.listen(port, () =>
   console.log(`Server running on http://localhost${port}`.bgGreen.black)
-);
+);*/
+//----------------
+const express = require("express");
+const app = express();
+require("dotenv").config();
+require("colors");
+const cors = require("cors");
+const connectDB = require("./dbinit");
+connectDB();
+
+const user = require("./routes/user");
+const order = require("./routes/order");
+const category = require("./routes/category");
+const product = require("./routes/product");
+
+const port = process.env.PORT || 8081;
+
+//middlewares
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.get("/", (req, res) => {
+  res.send("Welcome to our eCommerce API !");
+});
+
+//here middlewares like app.use("/api/products", product )
+app.use("/api/user", user);
+app.use("/api/order", order);
+app.use("/api/categories", category);
+app.use("/api/products", product);
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
