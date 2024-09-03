@@ -8,6 +8,7 @@ connectDB();
 
 const user = require("./routes/user");
 const order = require("./routes/order");
+
 const port = process.env.PORT || 8081;
 
 //middlewares
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 //here middlewares like app.use("/api/products", product )
 app.use("/api/user", user);
 app.use("/api/order", order);
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
