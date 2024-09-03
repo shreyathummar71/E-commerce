@@ -35,10 +35,6 @@ const getProductsByCategory = async (req, res) => {
   try {
     const { categoryId } = req.params;
 
-    /*if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-      return res.status(400).json({ message: "Invalid category ID" });
-    }
-*/
     const categoryExists = await Category.findById(categoryId);
     if (!categoryExists) {
       return res.status(404).json({ message: "Category not found" });
