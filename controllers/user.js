@@ -32,6 +32,26 @@ const getUserById = async (req, res) => {
   }
 };
 
+//retrive user by email
+const getUserByEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email }).populate({
+      path: "orders",
+      populate: {
+        path: "products.productId",
+        model: "product",
+      },
+    });
+    if (!user) {
+      return res.status(404).json({ message: "No such user" });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Update a user by ID
 const updateUser = async (req, res) => {
   try {
@@ -55,4 +75,12 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-module.exports = { createUser, getUsers, getUserById, updateUser, deleteUser };
+
+module.exports = {
+  createUser,
+  getUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+  getUserByEmail,
+};

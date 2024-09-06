@@ -9,18 +9,25 @@ const createOrder = async (req, res) => {
 
     // Check if user exists
     const user = await User.findById(userId);
+    console.log("Fetched User:", user); // Log the user
     if (!user) return res.status(400).json({ message: "User does not exist" });
 
     // Check if all products exist
     let total = 0;
     for (const item of products) {
+      console.log("Processing Item:", item); // Log the item
       const product = await Product.findById(item.productId);
       if (!product)
         return res.status(400).json({
           message: `Product with ID ${item.productId} does not exist`,
         });
-      total += product.price * item.quantity;
+      console.log("Product Price:", product.productPrice); // Log the price of the product
+      total += product.productPrice * item.quantity;
     }
+
+    // Round the total to two decimal places
+    total = parseFloat(total.toFixed(2));
+    console.log("Calculated total:", total);
 
     // Create the order
     const order = new Order({ userId, products, total });
